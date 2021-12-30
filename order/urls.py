@@ -3,4 +3,5 @@ from order import views
 urlpatterns = [
     path('api/order/', views.ListCreatOrderAPI.as_view(), name="order_api"),
     path('api/order/best-selling/', views.best_selling_products, name="best_selling-api"), 
+    path('api/order/year/', views.years_orders, name="years_orders-api"), 
 ]
