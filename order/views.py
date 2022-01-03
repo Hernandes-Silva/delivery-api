@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view
 from django.db.models import Count
 from rest_framework.response import Response
 from django.db.models.functions import TruncDate, Cast
+from django.utils import timezone
 # Create your views here.
 @api_view(['GET',])
 def best_selling_products(request):
@@ -18,9 +19,12 @@ def best_selling_products(request):
     return Response(best_selling[:5])
 @api_view(['GET',])
 def years_orders(request):
+    year = timezone.now().year
     orders = Order.objects.all().filter(paid=True)
+    #orders = orders.filter(created__year = year)
     orders = orders.annotate(date=Cast(TruncDate('created'), CharField()))\
     .order_by('date').values('date').annotate(value=Count('date'))
+    print(orders)
     return Response(orders)
     
 class ListCreatOrderAPI(ListCreateAPIView):
